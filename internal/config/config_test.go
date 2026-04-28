@@ -47,6 +47,78 @@ github_token: "ghp_test"
 	}
 }
 
+func TestLoad_MessageTTL_DurationString(t *testing.T) {
+	tests := []struct {
+		name    string
+		ttl     string
+		wantSec int
+	}{
+		{"hours", `"48h"`, 48 * 3600},
+		{"minutes", `"30m"`, 30 * 60},
+		{"combined", `"1h30m"`, 90 * 60},
+		{"integer seconds", "7200", 7200},
+		{"zero", "0", 0},
+		{"empty", "", 0},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			content := `slackliner_url: "http://example.com"` + "\n"
+			if tc.ttl != "" {
+				content += "message_ttl: " + tc.ttl + "\n"
+			}
+			path := writeTemp(t, content)
+			cfg, err := config.Load(path)
+			if err != nil {
+				t.Fatalf("unexpected error: %v", err)
+			}
+			if cfg.MessageTTL != tc.wantSec {
+				t.Errorf("message_ttl %q: got %d seconds, want %d", tc.ttl, cfg.MessageTTL, tc.wantSec)
+			}
+		})
+	}
+}
+
+func TestLoad_MessageTTL_InvalidValue(t *testing.T) {
+	path := writeTemp(t, `
+slackliner_url: "http://example.com"
+message_ttl: "notaduration"
+`)
+	_, err := config.Load(path)
+	if err == nil {
+		t.Fatal("expected error for invalid message_ttl, got nil")
+	}
+}
+
+func TestLoad_GitHubToken_FromEnv(t *testing.T) {
+	t.Setenv("GITHUB_TOKEN", "env_token")
+
+	path := writeTemp(t, `slackliner_url: "http://example.com"`)
+	cfg, err := config.Load(path)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if cfg.GitHubToken != "env_token" {
+		t.Errorf("expected token from env, got %q", cfg.GitHubToken)
+	}
+}
+
+func TestLoad_GitHubToken_ConfigTakesPrecedence(t *testing.T) {
+	t.Setenv("GITHUB_TOKEN", "env_token")
+
+	path := writeTemp(t, `
+slackliner_url: "http://example.com"
+github_token: "config_token"
+`)
+	cfg, err := config.Load(path)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if cfg.GitHubToken != "config_token" {
+		t.Errorf("expected config token to take precedence, got %q", cfg.GitHubToken)
+	}
+}
+
 func TestLoad_MissingSlackLinerURL(t *testing.T) {
 	path := writeTemp(t, `
 slack_channel: "#general"
@@ -71,3 +143,4 @@ func TestLoad_InvalidYAML(t *testing.T) {
 		t.Fatal("expected error for invalid YAML, got nil")
 	}
 }
+

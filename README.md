@@ -41,14 +41,34 @@ slackliner_url: "http://localhost:8080"
 # Slack channel to post to (optional – defaults to the SlackLiner/bot default)
 slack_channel: "#general"
 
-# How long (in seconds) the message is kept before auto-deletion via TimeBomb (0 = never)
-message_ttl: 0
+# How long the message is kept before auto-deletion via TimeBomb (0 = never).
+# Accepts a Go duration string (e.g. "48h", "1h30m", "30m") or a plain integer in seconds.
+message_ttl: "48h"
 
 # GitHub personal access token (optional – only needed for private repos)
+# Can also be set via the GITHUB_TOKEN environment variable or a .env file.
 github_token: ""
 ```
 
-> **Note:** `config.yaml` is listed in `.gitignore` and will never be committed.
+### GitHub Token via `.env`
+
+You can provide the GitHub token through a `.env` file instead of (or in addition to) the config file. Copy the example and set your token:
+
+```sh
+cp .env.example .env
+```
+
+Edit `.env`:
+
+```sh
+GITHUB_TOKEN=your_github_token_here
+```
+
+The token is resolved in the following order (first non-empty value wins):
+1. `github_token` field in `config.yaml`
+2. `GITHUB_TOKEN` environment variable (including values loaded from `.env`)
+
+> **Note:** Both `config.yaml` and `.env` are listed in `.gitignore` and will never be committed.
 
 ## Usage
 
