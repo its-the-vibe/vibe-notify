@@ -2,13 +2,13 @@
 # Copy this file to config.yaml and fill in your values.
 # Do NOT commit config.yaml – it is already in .gitignore.
 
-# Slack incoming webhook URL (required)
-slack_webhook_url: "https://hooks.slack.com/services/YOUR/WEBHOOK/URL"
+# SlackLiner service base URL (required) – e.g. http://localhost:8080
+slackliner_url: "http://localhost:8080"
 
-# Slack channel to post notifications to (optional – defaults to the webhook's channel)
+# Slack channel to post notifications to (optional – defaults to the SlackLiner/bot default)
 slack_channel: "#general"
 
-# How long (in seconds) the message should be considered relevant (informational, default 0)
+# How long (in seconds) the message should be kept before auto-deletion via TimeBomb (0 = never)
 message_ttl: 0
 
 # GitHub personal access token (optional – only needed for private repositories)

@@ -28,13 +28,13 @@ cp config.example.yaml config.yaml
 Edit `config.yaml`:
 
 ```yaml
-# Slack incoming webhook URL (required)
-slack_webhook_url: "https://hooks.slack.com/services/YOUR/WEBHOOK/URL"
+# SlackLiner service base URL (required)
+slackliner_url: "http://localhost:8080"
 
-# Slack channel to post to (optional – defaults to the webhook's channel)
+# Slack channel to post to (optional – defaults to the SlackLiner/bot default)
 slack_channel: "#general"
 
-# How long (in seconds) the message is relevant (informational)
+# How long (in seconds) the message is kept before auto-deletion via TimeBomb (0 = never)
 message_ttl: 0
 
 # GitHub personal access token (optional – only needed for private repos)

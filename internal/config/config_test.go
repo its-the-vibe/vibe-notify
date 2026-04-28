@@ -23,7 +23,7 @@ func writeTemp(t *testing.T, content string) string {
 
 func TestLoad_ValidConfig(t *testing.T) {
 	path := writeTemp(t, `
-slack_webhook_url: "https://hooks.slack.com/services/T/B/X"
+slackliner_url: "http://slackliner.example.com"
 slack_channel: "#general"
 message_ttl: 3600
 github_token: "ghp_test"
@@ -33,8 +33,8 @@ github_token: "ghp_test"
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
-	if cfg.SlackWebhookURL != "https://hooks.slack.com/services/T/B/X" {
-		t.Errorf("unexpected webhook URL: %s", cfg.SlackWebhookURL)
+	if cfg.SlackLinerURL != "http://slackliner.example.com" {
+		t.Errorf("unexpected SlackLiner URL: %s", cfg.SlackLinerURL)
 	}
 	if cfg.SlackChannel != "#general" {
 		t.Errorf("unexpected channel: %s", cfg.SlackChannel)
@@ -47,13 +47,13 @@ github_token: "ghp_test"
 	}
 }
 
-func TestLoad_MissingWebhook(t *testing.T) {
+func TestLoad_MissingSlackLinerURL(t *testing.T) {
 	path := writeTemp(t, `
 slack_channel: "#general"
 `)
 	_, err := config.Load(path)
 	if err == nil {
-		t.Fatal("expected error for missing slack_webhook_url, got nil")
+		t.Fatal("expected error for missing slackliner_url, got nil")
 	}
 }
 
