@@ -3,6 +3,7 @@ module github.com/its-the-vibe/vibe-notify
 go 1.26.2
 
 require (
+	github.com/joho/godotenv v1.5.1
 	github.com/spf13/cobra v1.10.2
 	gopkg.in/yaml.v3 v3.0.1
 )

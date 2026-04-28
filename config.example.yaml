@@ -8,8 +8,10 @@ slackliner_url: "http://localhost:8080"
 # Slack channel to post notifications to (optional – defaults to the SlackLiner/bot default)
 slack_channel: "#general"
 
-# How long (in seconds) the message should be kept before auto-deletion via TimeBomb (0 = never)
-message_ttl: 0
+# How long the message should be kept before auto-deletion via TimeBomb (0 = never).
+# Accepts a Go duration string (e.g. "48h", "1h30m", "30m") or a plain integer in seconds.
+message_ttl: "48h"
 
-# GitHub personal access token (optional – only needed for private repositories)
+# GitHub personal access token (optional – only needed for private repositories).
+# Can also be set via the GITHUB_TOKEN environment variable or a .env file.
 github_token: ""
