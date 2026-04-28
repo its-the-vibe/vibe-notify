@@ -1,0 +1,15 @@
+# vibe-notify configuration example
+# Copy this file to config.yaml and fill in your values.
+# Do NOT commit config.yaml – it is already in .gitignore.
+
+# Slack incoming webhook URL (required)
+slack_webhook_url: "https://hooks.slack.com/services/YOUR/WEBHOOK/URL"
+
+# Slack channel to post notifications to (optional – defaults to the webhook's channel)
+slack_channel: "#general"
+
+# How long (in seconds) the message should be considered relevant (informational, default 0)
+message_ttl: 0
+
+# GitHub personal access token (optional – only needed for private repositories)
+github_token: ""

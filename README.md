@@ -1,2 +1,82 @@
 # vibe-notify
-A command-line tool for importing and broadcasting GitHub issues and pull requests to Slack
+
+[![CI](https://github.com/its-the-vibe/vibe-notify/actions/workflows/ci.yaml/badge.svg)](https://github.com/its-the-vibe/vibe-notify/actions/workflows/ci.yaml)
+
+A command-line tool for importing and broadcasting GitHub issues and pull requests to Slack.
+
+## Requirements
+
+- Go 1.24+
+
+## Installation
+
+```sh
+git clone https://github.com/its-the-vibe/vibe-notify.git
+cd vibe-notify
+make build
+# Binary is placed in bin/vibe-notify
+```
+
+## Configuration
+
+Copy the example config and fill in your values:
+
+```sh
+cp config.example.yaml config.yaml
+```
+
+Edit `config.yaml`:
+
+```yaml
+# Slack incoming webhook URL (required)
+slack_webhook_url: "https://hooks.slack.com/services/YOUR/WEBHOOK/URL"
+
+# Slack channel to post to (optional – defaults to the webhook's channel)
+slack_channel: "#general"
+
+# How long (in seconds) the message is relevant (informational)
+message_ttl: 0
+
+# GitHub personal access token (optional – only needed for private repos)
+github_token: ""
+```
+
+> **Note:** `config.yaml` is listed in `.gitignore` and will never be committed.
+
+## Usage
+
+### Broadcast a GitHub Issue
+
+```sh
+vibe-notify issue <issue-url>
+```
+
+**Example:**
+
+```sh
+vibe-notify issue https://github.com/its-the-vibe/vibe-notify/issues/1
+```
+
+This fetches the issue details from the GitHub API and posts a formatted message to the configured Slack channel.
+
+By default `vibe-notify` looks for `config.yaml` in the current directory. Use the `--config` flag to specify a different path:
+
+```sh
+vibe-notify --config /path/to/my-config.yaml issue https://github.com/owner/repo/issues/42
+```
+
+## Development
+
+```sh
+# Run tests
+make test
+
+# Run linter
+make lint
+
+# Build binary
+make build
+
+# Clean build artefacts
+make clean
+```

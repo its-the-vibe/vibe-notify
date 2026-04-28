@@ -27,6 +27,12 @@ go.work.sum
 # env file
 .env
 
+# vibe-notify real config (use config.example.yaml as a template)
+config.yaml
+
+# Build output
+bin/
+
 # Editor/IDE
 # .idea/
 # .vscode/
