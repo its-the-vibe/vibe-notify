@@ -33,8 +33,8 @@ func TestBuildIssueMetadata(t *testing.T) {
 
 	meta := buildIssueMetadata(issue, "owner/repo")
 
-	if meta["event_type"] != issueBroadcastEventType {
-		t.Errorf("event_type: got %v, want %v", meta["event_type"], issueBroadcastEventType)
+	if meta["event_type"] != issueEventType {
+		t.Errorf("event_type: got %v, want %v", meta["event_type"], issueEventType)
 	}
 
 	payload, ok := meta["event_payload"].(map[string]interface{})
@@ -55,4 +55,3 @@ func TestBuildIssueMetadata(t *testing.T) {
 		}
 	}
 }
-

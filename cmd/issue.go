@@ -14,7 +14,7 @@ import (
 	"github.com/its-the-vibe/vibe-notify/internal/slack"
 )
 
-const issueBroadcastEventType = "issue_broadcast"
+const issueEventType = "issue_created"
 
 var issueCmd = &cobra.Command{
 	Use:   "issue <issue-url>",
@@ -99,7 +99,7 @@ func buildIssueMessage(issue *gh.Issue, repository string) string {
 // buildIssueMetadata constructs the Slack message metadata for an issue broadcast event.
 func buildIssueMetadata(issue *gh.Issue, repository string) map[string]interface{} {
 	return map[string]interface{}{
-		"event_type": issueBroadcastEventType,
+		"event_type": issueEventType,
 		"event_payload": map[string]interface{}{
 			"title":        issue.Title,
 			"issue_number": issue.Number,
