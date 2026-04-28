@@ -7,6 +7,13 @@ A command-line tool for importing and broadcasting GitHub issues and pull reques
 ## Requirements
 
 - Go 1.24+
+- [GitHub CLI (`gh`)](https://cli.github.com/) – used to fetch issue and pull request details using your existing authentication
+
+> **Note:** If the `gh` CLI is not installed, `vibe-notify` will fall back to direct GitHub API calls using the `github_token` from your config. Install and authenticate the `gh` CLI with:
+> ```sh
+> # Install: https://cli.github.com/
+> gh auth login
+> ```
 
 ## Installation
 
@@ -57,7 +64,7 @@ vibe-notify issue <issue-url>
 vibe-notify issue https://github.com/its-the-vibe/vibe-notify/issues/1
 ```
 
-This fetches the issue details from the GitHub API and posts a formatted message to the configured Slack channel.
+This fetches the issue details using the `gh` CLI (falling back to the GitHub API if `gh` is not installed) and posts a formatted message to the configured Slack channel.
 
 By default `vibe-notify` looks for `config.yaml` in the current directory. Use the `--config` flag to specify a different path:
 

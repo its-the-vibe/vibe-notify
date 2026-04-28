@@ -2,8 +2,10 @@ package cmd
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"os"
+	"os/exec"
 
 	"github.com/spf13/cobra"
 
@@ -45,10 +47,19 @@ func runIssue(cmd *cobra.Command, args []string) error {
 
 	ctx := context.Background()
 
-	ghClient := gh.NewClient(cfg.GitHubToken)
-	issue, err := ghClient.GetIssue(ctx, parsed.Owner, parsed.Repo, parsed.Number)
+	// Prefer the gh CLI for authentication; fall back to the HTTP API if gh is not installed.
+	issue, err := gh.GetIssueViaCLI(ctx, parsed.Owner, parsed.Repo, parsed.Number)
 	if err != nil {
-		return fmt.Errorf("fetching GitHub issue: %w", err)
+		if errors.Is(err, exec.ErrNotFound) {
+			fmt.Fprintln(os.Stderr, "⚠️  gh CLI not found – falling back to GitHub API (authentication via config token)")
+			ghClient := gh.NewClient(cfg.GitHubToken)
+			issue, err = ghClient.GetIssue(ctx, parsed.Owner, parsed.Repo, parsed.Number)
+			if err != nil {
+				return fmt.Errorf("fetching GitHub issue: %w", err)
+			}
+		} else {
+			return fmt.Errorf("fetching GitHub issue via gh CLI: %w", err)
+		}
 	}
 
 	repository := parsed.Owner + "/" + parsed.Repo
